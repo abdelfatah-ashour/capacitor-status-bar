@@ -1,6 +1,6 @@
 {
   "name": "capacitor-status-bar",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Capacitor plugin for managing the status bar style, visibility, and color on iOS and Android. Control overlay modes, background colors, and appearance for native mobile applications.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
