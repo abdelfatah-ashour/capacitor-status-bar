@@ -1,7 +1,7 @@
 {
   "name": "capacitor-status-bar",
   "version": "0.0.1",
-  "description": "Capacitor status bar",
+  "description": "Capacitor plugin for managing the status bar style, visibility, and color on iOS and Android. Control overlay modes, background colors, and appearance for native mobile applications.",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
@@ -17,6 +17,7 @@
   ],
   "author": "Abdelfattah Ashour",
   "license": "MIT",
+  "homepage": "https://github.com/abdelfatah-ashour/capacitor-status-bar#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/abdelfatah-ashour/capacitor-status-bar.git"
@@ -26,8 +27,25 @@
   },
   "keywords": [
     "capacitor",
+    "capacitor-plugin",
+    "capacitor-community",
     "plugin",
-    "native"
+    "native",
+    "status-bar",
+    "statusbar",
+    "android",
+    "ios",
+    "mobile",
+    "ionic",
+    "cordova",
+    "hybrid-app",
+    "native-bridge",
+    "mobile-app",
+    "status-bar-style",
+    "status-bar-color",
+    "overlay",
+    "immersive",
+    "navigation-bar"
   ],
   "scripts": {
     "verify": "npm run verify:ios && npm run verify:android && npm run verify:web",
@@ -43,7 +61,8 @@
     "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.mjs",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "bump": "bash scripts/bump-version.sh"
   },
   "devDependencies": {
     "@capacitor/android": "^7.0.0",
