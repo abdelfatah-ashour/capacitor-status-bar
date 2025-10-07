@@ -1,0 +1,55 @@
+<!-- <ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Blank
+    </ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">StatusBar Demo</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-list>
+    <ion-item>
+      <ion-label>Style</ion-label>
+      <ion-segment [ngModel]="style()" (ngModelChange)="style.set($event)">
+        <ion-segment-button [value]="Style.LIGHT">Light</ion-segment-button>
+        <ion-segment-button [value]="Style.DARK">Dark</ion-segment-button>
+        <ion-segment-button [value]="Style.CUSTOM">Custom</ion-segment-button>
+      </ion-segment>
+    </ion-item>
+     @if(style() === Style.CUSTOM){
+       <ion-item>
+         <ion-label position="stacked">Color (hex)</ion-label>
+         <ion-input [ngModel]="color()" (ngModelChange)="color.set($event)" placeholder="#ff0000"></ion-input>
+       </ion-item>
+     }
+
+
+    <ion-item>
+      <ion-label>Animated</ion-label>
+      <ion-toggle [ngModel]="animated()" (ngModelChange)="animated.set($event)"></ion-toggle>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Overlays WebView</ion-label>
+      <ion-toggle [ngModel]="overlaysWebView()" (ngModelChange)="overlaysWebView.set($event); setOverlay()"></ion-toggle>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-button expand="block" (click)="applyStyle()">Apply Style</ion-button>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-button color="success" (click)="show()">Show</ion-button>
+      <ion-button color="medium" (click)="hide()" style="margin-left: 8px">Hide</ion-button>
+    </ion-item>
+  </ion-list>
+  <ion-item lines="none">
+    <ion-button color="primary" (click)="getSafeAreaInsets()">Get Safe Area Insets</ion-button>
+    <ion-label>{{ safeAreaInsets() | json }}</ion-label>
+  </ion-item>
+</ion-content>
