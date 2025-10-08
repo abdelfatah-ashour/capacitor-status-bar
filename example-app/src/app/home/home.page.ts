@@ -2,8 +2,8 @@ import { Component, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonItem, IonList, IonInput, IonToggle, IonLabel, IonSegment, IonSegmentButton } from '@ionic/angular/standalone';
 import { FormsModule } from '@angular/forms';
-import { CAPStatusBar, Style, StatusBarColor} from "capacitor-status-bar";
-import {SafeAreaInsets} from "capacitor-status-bar";
+import { CAPStatusBar, Style, StatusBarColor} from "cap-status-bar";
+import {SafeAreaInsets} from "cap-status-bar";
 import { JsonPipe } from '@angular/common';
 
 @Component({
