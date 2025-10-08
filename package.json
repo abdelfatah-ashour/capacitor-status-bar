@@ -13,7 +13,7 @@
     "ios/Sources",
     "ios/Tests",
     "Package.swift",
-    "CapacitorStatusBar.podspec"
+    "CapStatusBar.podspec"
   ],
   "author": "Abdelfattah Ashour",
   "license": "MIT",
@@ -57,7 +57,7 @@
     "eslint": "eslint . --ext ts",
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\" --plugin=prettier-plugin-java",
     "swiftlint": "node-swiftlint",
-    "docgen": "docgen --api StatusBarPlugin --output-readme README.md --output-json dist/docs.json",
+    "docgen": "docgen --api CAPStatusBarPlugin --output-readme README.md --output-json dist/docs.json",
     "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.mjs",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",

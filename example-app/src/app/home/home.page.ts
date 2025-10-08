@@ -2,7 +2,7 @@ import { Component, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonItem, IonList, IonInput, IonToggle, IonLabel, IonSegment, IonSegmentButton } from '@ionic/angular/standalone';
 import { FormsModule } from '@angular/forms';
-import { StatusBar, Style, StatusBarColor} from "capacitor-status-bar";
+import { CAPStatusBar, Style, StatusBarColor} from "capacitor-status-bar";
 import {SafeAreaInsets} from "capacitor-status-bar";
 import { JsonPipe } from '@angular/common';
 
@@ -25,23 +25,23 @@ export class HomePage {
   constructor(private router: Router) {}
 
   async applyStyle() {
-    await StatusBar.setStyle({ style: this.style(), color: this.style() === Style.CUSTOM ? this.color() : undefined });
+    await CAPStatusBar.setStyle({ style: this.style(), color: this.style() === Style.CUSTOM ? this.color() : undefined });
   }
 
   async show() {
-    await StatusBar.show({ animated: this.animated() });
+    await CAPStatusBar.show({ animated: this.animated() });
   }
 
   async hide() {
-    await StatusBar.hide({ animated: this.animated() });
+    await CAPStatusBar.hide({ animated: this.animated() });
   }
 
   async setOverlay() {
-    await StatusBar.setOverlaysWebView({ value: this.overlaysWebView() });
+    await CAPStatusBar.setOverlaysWebView({ value: this.overlaysWebView() });
   }
 
   async getSafeAreaInsets() {
-    this.safeAreaInsets.set(await StatusBar.getSafeAreaInsets());
+    this.safeAreaInsets.set(await CAPStatusBar.getSafeAreaInsets());
   }
 
   navigateToChat() {

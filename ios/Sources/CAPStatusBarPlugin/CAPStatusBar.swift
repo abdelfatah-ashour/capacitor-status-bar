@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 import Capacitor
 
-@objc public class StatusBar: NSObject {
+@objc public class CAPStatusBar: NSObject {
     // Tag to identify the status bar background view
     private static let statusBarViewTag = 38482458
     // Store the current background color to restore when showing
@@ -12,7 +12,7 @@ import Capacitor
         DispatchQueue.main.async {
             let isDarkMode = self.isSystemInDarkMode()
             let style = isDarkMode ? "DARK" : "LIGHT"
-            print("StatusBar: Applying default style based on system theme - isDarkMode=\(isDarkMode), style=\(style)")
+            print("CAPStatusBar: Applying default style based on system theme - isDarkMode=\(isDarkMode), style=\(style)")
             self.setStyle(style: style, colorHex: nil)
         }
     }
@@ -65,7 +65,7 @@ import Capacitor
                                                height: statusBarManager.statusBarFrame.height,
                                                color: backgroundColor)
 
-            print("StatusBar: setStyle - style=\(upperStyle), backgroundColor=\(String(describing: backgroundColor)), statusBarStyle=\(statusBarStyle)")
+            print("CAPStatusBar: setStyle - style=\(upperStyle), backgroundColor=\(String(describing: backgroundColor)), statusBarStyle=\(statusBarStyle)")
         }
     }
 
@@ -78,7 +78,7 @@ import Capacitor
             // Log current status bar state via status bar manager
             if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                let statusBarManager = windowScene.statusBarManager {
-                print("StatusBar: show() - Current hidden state: \(statusBarManager.isStatusBarHidden)")
+                print("CAPStatusBar: show() - Current hidden state: \(statusBarManager.isStatusBarHidden)")
             }
 
             // Set visibility using the application-level API
@@ -99,7 +99,7 @@ import Capacitor
             // Log current status bar state via status bar manager
             if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                let statusBarManager = windowScene.statusBarManager {
-                print("StatusBar: hide() - Current hidden state: \(statusBarManager.isStatusBarHidden)")
+                print("CAPStatusBar: hide() - Current hidden state: \(statusBarManager.isStatusBarHidden)")
             }
 
             // Set visibility using the application-level API
@@ -130,7 +130,7 @@ import Capacitor
     ///   - color: The background color (nil to remove the view)
     private func updateStatusBarBackgroundView(in window: UIWindow, height: CGFloat, color: UIColor?) {
         // Find existing status bar view
-        let existingView = window.viewWithTag(StatusBar.statusBarViewTag)
+        let existingView = window.viewWithTag(CAPStatusBar.statusBarViewTag)
 
         if let color = color {
             // Create or update the status bar background view
@@ -140,7 +140,7 @@ import Capacitor
                 statusBarView = existing
             } else {
                 statusBarView = UIView(frame: CGRect(x: 0, y: 0, width: window.bounds.width, height: height))
-                statusBarView.tag = StatusBar.statusBarViewTag
+                statusBarView.tag = CAPStatusBar.statusBarViewTag
                 statusBarView.autoresizingMask = [.flexibleWidth]
                 window.addSubview(statusBarView)
             }
@@ -165,18 +165,18 @@ import Capacitor
     @objc public func setBackground(colorHex: String?) {
         DispatchQueue.main.async {
             guard let colorHex = colorHex, let color = self.colorFromHex(colorHex) else {
-                print("StatusBar: setBackground - Invalid color or nil")
+                print("CAPStatusBar: setBackground - Invalid color or nil")
                 return
             }
 
             guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
                   let window = windowScene.windows.first else {
-                print("StatusBar: setBackground - Unable to get window")
+                print("CAPStatusBar: setBackground - Unable to get window")
                 return
             }
 
             window.backgroundColor = color
-            print("StatusBar: setBackground - Set window background to \(colorHex)")
+            print("CAPStatusBar: setBackground - Set window background to \(colorHex)")
         }
     }
 
@@ -192,9 +192,9 @@ import Capacitor
                 insets["left"] = safeAreaInsets.left
                 insets["right"] = safeAreaInsets.right
 
-                print("StatusBar: getSafeAreaInsets - top=\(safeAreaInsets.top), bottom=\(safeAreaInsets.bottom), left=\(safeAreaInsets.left), right=\(safeAreaInsets.right)")
+                print("CAPStatusBar: getSafeAreaInsets - top=\(safeAreaInsets.top), bottom=\(safeAreaInsets.bottom), left=\(safeAreaInsets.left), right=\(safeAreaInsets.right)")
             } else {
-                print("StatusBar: getSafeAreaInsets - Unable to get window, returning zero insets")
+                print("CAPStatusBar: getSafeAreaInsets - Unable to get window, returning zero insets")
             }
 
             completion(insets)
@@ -205,12 +205,12 @@ import Capacitor
     private func makeStatusBarBackgroundTransparent() {
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
               let window = windowScene.windows.first,
-              let statusBarView = window.viewWithTag(StatusBar.statusBarViewTag) else {
+              let statusBarView = window.viewWithTag(CAPStatusBar.statusBarViewTag) else {
             return
         }
 
         statusBarView.backgroundColor = .clear
-        print("StatusBar: Made background transparent")
+        print("CAPStatusBar: Made background transparent")
     }
 
     /// Restores the status bar background view to its original color
@@ -226,7 +226,7 @@ import Capacitor
             self.updateStatusBarBackgroundView(in: window,
                                                height: statusBarManager.statusBarFrame.height,
                                                color: color)
-            print("StatusBar: Restored background color: \(color)")
+            print("CAPStatusBar: Restored background color: \(color)")
         }
     }
 

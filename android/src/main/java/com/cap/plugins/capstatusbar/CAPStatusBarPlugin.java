@@ -1,4 +1,4 @@
-package com.capacitor.plugins.statusbar;
+package com.cap.plugins.capstatusbar;
 
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -7,10 +7,10 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 
 import java.util.Objects;
 
-@CapacitorPlugin(name = "StatusBar")
-public class StatusBarPlugin extends Plugin {
-    private static final String TAG = "StatusBarPlugin";
-    private final StatusBar implementation = new StatusBar();
+@CapacitorPlugin(name = "CAPStatusBar")
+public class CAPStatusBarPlugin extends Plugin {
+    private static final String TAG = "CAPStatusBarPlugin";
+    private final CAPStatusBar implementation = new CAPStatusBar();
 
     @Override
     public void load() {

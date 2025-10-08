@@ -7,22 +7,22 @@ let package = Package(
     products: [
         .library(
             name: "CapacitorStatusBar",
-            targets: ["StatusBarPlugin"])
+            targets: ["CAPStatusBarPlugin"])
     ],
     dependencies: [
         .package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", from: "7.0.0")
     ],
     targets: [
         .target(
-            name: "StatusBarPlugin",
+            name: "CAPStatusBarPlugin",
             dependencies: [
                 .product(name: "Capacitor", package: "capacitor-swift-pm"),
                 .product(name: "Cordova", package: "capacitor-swift-pm")
             ],
-            path: "ios/Sources/StatusBarPlugin"),
+            path: "ios/Sources/CAPStatusBarPlugin"),
         .testTarget(
-            name: "StatusBarPluginTests",
-            dependencies: ["StatusBarPlugin"],
-            path: "ios/Tests/StatusBarPluginTests")
+            name: "CAPStatusBarPluginTests",
+            dependencies: ["CAPStatusBarPlugin"],
+            path: "ios/Tests/CAPStatusBarPluginTests")
     ]
 )

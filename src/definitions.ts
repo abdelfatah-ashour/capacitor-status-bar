@@ -55,7 +55,7 @@ export type SafeAreaInsets = {
   right: number;
 };
 
-export interface StatusBarPlugin {
+export interface CAPStatusBarPlugin {
   /**
    * Set the status bar and navigation bar style and color.
    * @param options - The options to set the status bar style and color.
