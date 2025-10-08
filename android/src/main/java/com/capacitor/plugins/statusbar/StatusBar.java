@@ -40,10 +40,41 @@ public class StatusBar {
     private int currentStatusBarColor = Color.BLACK;
     private int currentNavBarColor = Color.BLACK;
 
+    // Store original soft input mode to restore when overlay is disabled
+    private Integer originalSoftInputMode = null;
+
     public void setOverlaysWebView(Activity activity, boolean overlay) {
         Log.d(TAG, "setOverlaysWebView: overlay=" + overlay);
         Window window = activity.getWindow();
         WindowCompat.setDecorFitsSystemWindows(window, !overlay);
+
+        // Handle keyboard behavior to prevent window from being pushed up
+        // When overlay is enabled (full-screen mode), we need to ensure the keyboard
+        // resizes the content instead of pushing the entire window up
+        if (overlay) {
+            // Store the original soft input mode on first call
+            if (originalSoftInputMode == null) {
+                originalSoftInputMode = window.getAttributes().softInputMode;
+                Log.d(TAG, "setOverlaysWebView: Stored original soft input mode: " + originalSoftInputMode);
+            }
+
+            // Use SOFT_INPUT_ADJUST_RESIZE to resize the WebView when keyboard appears
+            // This prevents the Android bug where the entire window is pushed up
+            window.setSoftInputMode(
+                    android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+            Log.d(TAG, "setOverlaysWebView: Set SOFT_INPUT_ADJUST_RESIZE for overlay mode");
+        } else {
+            // When overlay is disabled, restore the original soft input mode if available
+            if (originalSoftInputMode != null) {
+                window.setSoftInputMode(originalSoftInputMode);
+                Log.d(TAG, "setOverlaysWebView: Restored original soft input mode: " + originalSoftInputMode);
+            } else {
+                // Fallback to default behavior (ADJUST_PAN)
+                window.setSoftInputMode(
+                        android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+                Log.d(TAG, "setOverlaysWebView: Set SOFT_INPUT_ADJUST_PAN for normal mode");
+            }
+        }
     }
 
     public void showStatusBar(Activity activity, boolean animated) {

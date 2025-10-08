@@ -1,10 +1,10 @@
-<!-- <ion-header [translucent]="true">
+<ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
       Blank
     </ion-title>
   </ion-toolbar>
-</ion-header> -->
+</ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
@@ -51,5 +51,11 @@
   <ion-item lines="none">
     <ion-button color="primary" (click)="getSafeAreaInsets()">Get Safe Area Insets</ion-button>
     <ion-label>{{ safeAreaInsets() | json }}</ion-label>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-button expand="block" color="tertiary" (click)="navigateToChat()">
+      Open Chat Demo
+    </ion-button>
   </ion-item>
 </ion-content>
