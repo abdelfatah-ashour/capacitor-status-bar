@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonItem, IonList, IonInput, IonToggle, IonLabel, IonSegment, IonSegmentButton } from '@ionic/angular/standalone';
 import { FormsModule } from '@angular/forms';
@@ -21,8 +21,7 @@ export class HomePage {
   overlaysWebView = signal(true);
   animated = signal(true);
   safeAreaInsets = signal<SafeAreaInsets>({ top: 0, bottom: 0, left: 0, right: 0 });
-
-  constructor(private router: Router) {}
+  private router = inject(Router);
 
   async applyStyle() {
     await CAPStatusBar.setStyle({ style: this.style(), color: this.style() === Style.CUSTOM ? this.color() : undefined });

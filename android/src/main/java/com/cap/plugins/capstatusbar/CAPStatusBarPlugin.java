@@ -5,11 +5,8 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 
-import java.util.Objects;
-
 @CapacitorPlugin(name = "CAPStatusBar")
 public class CAPStatusBarPlugin extends Plugin {
-    private static final String TAG = "CAPStatusBarPlugin";
     private final CAPStatusBar implementation = new CAPStatusBar();
 
     @Override
@@ -17,6 +14,7 @@ public class CAPStatusBarPlugin extends Plugin {
         super.load();
         // Apply default style based on system theme on plugin load
         getActivity().runOnUiThread(() -> {
+            implementation.ensureEdgeToEdgeConfigured(getActivity());
             implementation.applyDefaultStyle(getActivity());
         });
     }

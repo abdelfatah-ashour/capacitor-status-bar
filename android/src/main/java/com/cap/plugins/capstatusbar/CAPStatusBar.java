@@ -17,6 +17,9 @@ import androidx.annotation.Nullable;
 import androidx.core.graphics.ColorUtils;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+import com.getcapacitor.Plugin;
 
 import java.util.Objects;
 
@@ -29,7 +32,7 @@ import java.util.Objects;
  * - API 35+ (Android 15+): Fully compatible with edge-to-edge display
  * enforcement
  */
-public class CAPStatusBar {
+public class CAPStatusBar extends Plugin {
     private static final String TAG = "CAPStatusBar";
     private static final String STATUS_BAR_OVERLAY_TAG = "capacitor_status_bar_overlay";
     private static final String NAV_BAR_OVERLAY_TAG = "capacitor_navigation_bar_overlay";
@@ -40,41 +43,69 @@ public class CAPStatusBar {
     private int currentStatusBarColor = Color.BLACK;
     private int currentNavBarColor = Color.BLACK;
 
-    // Store original soft input mode to restore when overlay is disabled
-    private Integer originalSoftInputMode = null;
+    @Override
+    public void load() {
+        super.load();
+        setupEdgeToEdgeBehavior();
+    }
+
+    private void setupEdgeToEdgeBehavior() {
+        Activity activity = getActivity();
+        if (activity == null)
+            return;
+
+        Window window = activity.getWindow();
+        View decorView = window.getDecorView();
+
+        WindowCompat.setDecorFitsSystemWindows(window, false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) { // Android 14+
+            ViewCompat.setOnApplyWindowInsetsListener(decorView, (v, insets) -> {
+                ViewCompat.onApplyWindowInsets(v, insets);
+                return insets;
+            });
+        }
+    }
+
+    /**
+     * Ensures edge-to-edge is properly configured for Android 15+.
+     * This fixes the keyboard extra space issue by properly handling IME insets
+     * using the modern WindowInsets API instead of deprecated soft input modes.
+     *
+     * @param activity The activity to configure
+     */
+    public void ensureEdgeToEdgeConfigured(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) { // Android 15 (API 35)
+            Window window = activity.getWindow();
+            View decorView = window.getDecorView();
+
+            // Enable edge-to-edge mode for Android 15+
+            WindowCompat.setDecorFitsSystemWindows(window, false);
+
+            ViewCompat.setOnApplyWindowInsetsListener(decorView, (v, insets) -> {
+                androidx.core.graphics.Insets imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime());
+                androidx.core.graphics.Insets systemBarsInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+                boolean isKeyboardVisible = imeInsets.bottom > 0;
+                Log.d(TAG, "ensureEdgeToEdgeConfigured: IME visible=" + isKeyboardVisible
+                        + ", IME bottom=" + imeInsets.bottom
+                        + ", system bars bottom=" + systemBarsInsets.bottom);
+
+                ViewCompat.onApplyWindowInsets(v, insets);
+                return insets;
+            });
+
+            Log.d(TAG,
+                    "ensureEdgeToEdgeConfigured: Edge-to-edge enabled with WindowInsets API for Android 15+ (API 35+)");
+        } else {
+            Log.d(TAG, "ensureEdgeToEdgeConfigured: Android < 15, no action needed");
+        }
+    }
 
     public void setOverlaysWebView(Activity activity, boolean overlay) {
         Log.d(TAG, "setOverlaysWebView: overlay=" + overlay);
         Window window = activity.getWindow();
         WindowCompat.setDecorFitsSystemWindows(window, !overlay);
 
-        // Handle keyboard behavior to prevent window from being pushed up
-        // When overlay is enabled (full-screen mode), we need to ensure the keyboard
-        // resizes the content instead of pushing the entire window up
-        if (overlay) {
-            // Store the original soft input mode on first call
-            if (originalSoftInputMode == null) {
-                originalSoftInputMode = window.getAttributes().softInputMode;
-                Log.d(TAG, "setOverlaysWebView: Stored original soft input mode: " + originalSoftInputMode);
-            }
-
-            // Use SOFT_INPUT_ADJUST_RESIZE to resize the WebView when keyboard appears
-            // This prevents the Android bug where the entire window is pushed up
-            window.setSoftInputMode(
-                    android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-            Log.d(TAG, "setOverlaysWebView: Set SOFT_INPUT_ADJUST_RESIZE for overlay mode");
-        } else {
-            // When overlay is disabled, restore the original soft input mode if available
-            if (originalSoftInputMode != null) {
-                window.setSoftInputMode(originalSoftInputMode);
-                Log.d(TAG, "setOverlaysWebView: Restored original soft input mode: " + originalSoftInputMode);
-            } else {
-                // Fallback to default behavior (ADJUST_PAN)
-                window.setSoftInputMode(
-                        android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-                Log.d(TAG, "setOverlaysWebView: Set SOFT_INPUT_ADJUST_PAN for normal mode");
-            }
-        }
     }
 
     public void showStatusBar(Activity activity, boolean animated) {
@@ -243,9 +274,9 @@ public class CAPStatusBar {
         Window window = activity.getWindow();
         View decorView = window.getDecorView();
 
+        WindowInsets windowInsets = decorView.getRootWindowInsets();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             // API 30+ (Android 11+) - Use WindowInsets API
-            android.view.WindowInsets windowInsets = decorView.getRootWindowInsets();
             if (windowInsets != null) {
                 android.graphics.Insets systemBarsInsets = windowInsets.getInsets(WindowInsets.Type.systemBars());
                 android.graphics.Insets displayCutoutInsets = windowInsets.getInsets(WindowInsets.Type.displayCutout());
@@ -270,7 +301,6 @@ public class CAPStatusBar {
             }
         } else {
             // API 29 (Android 10) - Use deprecated system window insets
-            android.view.WindowInsets windowInsets = decorView.getRootWindowInsets();
             if (windowInsets != null) {
                 insets.put("top", windowInsets.getSystemWindowInsetTop());
                 insets.put("bottom", windowInsets.getSystemWindowInsetBottom());
